@@ -1,10 +1,7 @@
-unset SSH_AGENT_PID
-if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-fi
-export GPG_TTY=$(tty)
+gpgconf --launch gpg-agent
+set -e SSH_AUTH_SOCK
+set -U -x SSH_AUTH_SOCK $(gpgconf --list-dirs agent-ssh-socket)
 gpg-connect-agent updatestartuptty /bye >/dev/null
-
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
