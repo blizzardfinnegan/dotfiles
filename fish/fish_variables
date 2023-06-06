@@ -2,6 +2,8 @@
 # VERSION: 3.0
 SETUVAR EDITOR:nvim
 SETUVAR __fish_git_prompt_show_informative_status:true
+SETUVAR __fish_git_prompt_showdirtystate:true
+SETUVAR __fish_git_prompt_showuntrackedfiles:true
 SETUVAR __fish_initialized:3400
 SETUVAR fish_color_autosuggestion:006363
 SETUVAR fish_color_cancel:\x2d\x2dreverse
