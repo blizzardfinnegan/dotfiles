@@ -3,3 +3,5 @@
 	email = blizzardfinnegan@gmail.com
 [commit]
 	gpgSign = true
+[core]
+	editor = nvim
