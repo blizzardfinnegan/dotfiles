@@ -4,10 +4,11 @@
 
 - OpenSSH
 - GnuPG
-- Neovim
+- (Neo)Vim
+    - NeoVim requires LuaJIT, which is not yet compatible with RISC-V
 - fish
 - tmux
-- curl
+- curl || wget
 - git
 - rsync
 
@@ -17,7 +18,8 @@
 - C++ dev platform (Clang/GCC)
 - maven
 - >=jdk17
-- npm
+- npm (often distributed under NodeJS)
+    - Node is not yet compatible with RISC-V
     - @angular/cli
     - @angular/language-server
 
