@@ -1,27 +1,32 @@
 # List of Necessary Programs
 
-##Strictly necessary
+## Strictly necessary
 
 - OpenSSH
 - GnuPG
-- Neovim (and possibly, build dependencies)
+- Neovim
 - fish
 - tmux
 - curl
 - git
+- rsync
 
-##Dev tools
+## Dev tools
 
-- rustup (cargo, if not available)
-- maven
+- rustup 
 - C++ dev platform (Clang/GCC)
+- maven
+- >=jdk17
+- npm
+    - @angular/cli
+    - @angular/language-server
 
 ## Monitoring tools
 
 - btop
-- lazydocker
 
 ## Misc.
 
-- Links2
+- Links2/elinks/qutebrowser
+    - firefox for higher end hardware
 
