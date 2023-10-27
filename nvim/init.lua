@@ -142,9 +142,9 @@ require('Comment').setup()
 
 -- Enable `lukas-reineke/indent-blankline.nvim`
 -- See `:help indent_blankline.txt`
-require('indent_blankline').setup {
-  char = '┊',
-  show_trailing_blankline_indent = false,
+require('ibl').setup {
+--  char = '┊',
+--  show_trailing_blankline_indent = false,
 }
 
 -- Gitsigns
@@ -340,8 +340,12 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require('mason').setup()
 
 -- Enable the following language servers
-local servers = {'rust_analyzer'}
-
+local servers = {"angularls", "biome", 'rust_analyzer'}
+local caps = vim.lsp.protocol.make_client_capabilities()
+caps.textDocument.completion.completionItem.snippetSupport = true
+require('lspconfig').html.setup{
+  capabilities = capabilities,
+}
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
   ensure_installed = servers,
