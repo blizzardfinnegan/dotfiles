@@ -93,7 +93,7 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
-vim.cmd [[colorscheme desert]]
+vim.cmd [[colorscheme torte]]
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -340,7 +340,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require('mason').setup()
 
 -- Enable the following language servers
-local servers = {"angularls", "biome", 'rust_analyzer'}
+local servers = {'asp_lsp','asmfmt','dockerfile-language-server','ginko_ls', 'hdl-checker', 'rust_hdl', 'systemdlint', 'clangd', 'clang-format','rust_analyzer'}
 local caps = vim.lsp.protocol.make_client_capabilities()
 caps.textDocument.completion.completionItem.snippetSupport = true
 require('lspconfig').html.setup{
