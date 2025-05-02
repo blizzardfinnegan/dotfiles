@@ -79,6 +79,7 @@ vim.o.mouse = 'a'
 
 -- Enable break indent
 vim.o.breakindent = true
+vim.o.linebreak = true
 
 -- Save undo history
 vim.o.undofile = true
@@ -340,7 +341,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require('mason').setup()
 
 -- Enable the following language servers
-local servers = {'asp_lsp','asmfmt','dockerfile-language-server','ginko_ls', 'hdl-checker', 'rust_hdl', 'systemdlint', 'clangd', 'clang-format','rust_analyzer'}
+local servers = {'ginko_ls', 'clangd', 'rust_analyzer', 'kotlin_language_server', 'openscad_lsp'}
 local caps = vim.lsp.protocol.make_client_capabilities()
 caps.textDocument.completion.completionItem.snippetSupport = true
 require('lspconfig').html.setup{
