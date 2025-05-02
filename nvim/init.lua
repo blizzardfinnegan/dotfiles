@@ -29,7 +29,7 @@ require('packer').startup(function(use)
   use 'mfussenegger/nvim-jdtls'
   use 'LnL7/vim-nix'
   -- Alternate file manager
-  use { 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons',}, tag = 'nightly' } 
+  use { 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons',}} 
 
   use 'lervag/vimtex' -- LaTeX Editor
   -- Fuzzy Finder (files, lsp, etc)
