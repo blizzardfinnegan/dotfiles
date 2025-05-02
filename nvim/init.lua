@@ -341,23 +341,25 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 require('mason').setup()
 
 -- Enable the following language servers
-local servers = {'ginko_ls', 'clangd', 'rust_analyzer', 'kotlin_language_server', 'openscad_lsp'}
+local servers = {'html', 'ginko_ls', 'clangd', 'rust_analyzer', 'kotlin_language_server', 'openscad_lsp'}
 local caps = vim.lsp.protocol.make_client_capabilities()
 caps.textDocument.completion.completionItem.snippetSupport = true
-require('lspconfig').html.setup{
-  capabilities = capabilities,
-}
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
   ensure_installed = servers,
 }
 
-for _, lsp in ipairs(servers) do
-  require('lspconfig')[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
-end
+require("mason-lspconfig").setup_handlers {
+  function (servername)
+    require("lspconfig")[servername].setup {
+      on_attach = on_attach,
+      capabilities = capabilities,
+    }
+  end,
+  ["html"] = function ()
+    require('lspconfig').html.setup{ capabilities = capabilities, }
+  end,
+}
 
 -- Example custom configuration for lua
 --
