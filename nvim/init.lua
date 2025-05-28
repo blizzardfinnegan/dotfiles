@@ -1,56 +1,26 @@
---[[ Requirements:
+--[[ LSP Requirements:
   - pyright (python)
   - rust-analyzer (rust)
   - clangd (C/C++)
   - vscode-json-languageservice (json)
   - yaml-language-server (yaml)
+
+Plugin requirements:
+  - nvim-lua/plenary.nvim
+  - lewis6991/gitsigns.nvim
+  - numToStr/Comment.nvim
+  - nvim-treesitter/nvim-treesitter
+  - neovim/nvim-lspconfig
+  - hrsh7th/cmp-nvim-lsp
+  - hrsh7th/nvim-cmp
+  - nvim-lualine/lualine.nvim
+  - lukas-reineke/indent-blankline.nvim
+  - tpope/vim-sleuth
+  - folke/which-key.nvim
+  - nvim-tree/nvim-web-devicons
+  - nvim-tree/nvim-tree.lua
+  - lervag/vimtex
 ]]--
--- Install packer
-local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
-local is_bootstrap = false
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  is_bootstrap = true
-  vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
-  vim.cmd [[packadd packer.nvim]]
-end
-
--- stylua: ignore start
-require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim'                                                         -- Package manager
-  use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }            -- Add git related info in the signs columns and popups
-  use 'numToStr/Comment.nvim'                                                          -- "gc" to comment visual regions/lines
-  use 'nvim-treesitter/nvim-treesitter'                                                -- Highlight, edit, and navigate code
-  use { 'nvim-treesitter/nvim-treesitter-textobjects', after = { 'nvim-treesitter' } } -- Additional textobjects for treesitter
-  use 'neovim/nvim-lspconfig'                                                          -- Collection of configurations for built-in LSP client
-  use { 'hrsh7th/nvim-cmp', requires = { 'hrsh7th/cmp-nvim-lsp' } }                    -- Autocompletion
-  use { 'L3MON4D3/LuaSnip', requires = { 'saadparwaiz1/cmp_luasnip' } }                -- Snippet Engine and Snippet Expansion
-  use 'nvim-lualine/lualine.nvim'                                                      -- Fancier statusline
-  use 'lukas-reineke/indent-blankline.nvim'                                            -- Add indentation guides even on blank lines
-  use 'tpope/vim-sleuth'                                                               -- Detect tabstop and shiftwidth automatically
-  use {'folke/which-key.nvim'}                                                         -- which keys do what
-  -- Alternate file manager
-  use { 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons',}} 
-
-  use 'lervag/vimtex' -- LaTeX Editor
-
-  if is_bootstrap then
-    require('packer').sync()
-  end
-end)
--- stylua: ignore end
-
--- When we are bootstrapping a configuration, it doesn't
--- make sense to execute the rest of the init.lua.
---
--- You'll need to restart nvim, and then it will work.
-if is_bootstrap then
-  print '=================================='
-  print '    Plugins are being installed'
-  print '    Wait until Packer completes,'
-  print '       then restart nvim'
-  print '=================================='
-  return
-end
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
