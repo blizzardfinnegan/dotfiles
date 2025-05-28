@@ -86,16 +86,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
--- Set lualine as statusline
--- See `:help lualine.txt`
-require('lualine').setup {
-  options = {
-    icons_enabled = false,
-    theme = 'onedark',
-    component_separators = '|',
-    section_separators = '',
-  },
-}
+-- Enable alternate statusline
+require('vim-airline').setup()
 
 -- Enable Comment.nvim
 require('Comment').setup()
