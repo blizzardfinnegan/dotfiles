@@ -349,18 +349,6 @@ require('mason-lspconfig').setup {
   ensure_installed = servers,
 }
 
-require("mason-lspconfig").setup_handlers {
-  function (servername)
-    require("lspconfig")[servername].setup {
-      on_attach = on_attach,
-      capabilities = capabilities,
-    }
-  end,
-  ["html"] = function ()
-    require('lspconfig').html.setup{ capabilities = capabilities, }
-  end,
-}
-
 -- Example custom configuration for lua
 --
 -- Make runtime files discoverable to the server
