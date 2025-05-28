@@ -87,7 +87,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Enable alternate statusline
-require('luatab').setup()
+require('wlsample.airline')
 
 -- Enable Comment.nvim
 require('Comment').setup()
