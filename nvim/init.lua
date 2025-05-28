@@ -1,3 +1,10 @@
+--[[ Requirements:
+  - pyright (python)
+  - rust-analyzer (rust)
+  - clangd (C/C++)
+  - vscode-json-languageservice (json)
+  - yaml-language-server (yaml)
+]]--
 -- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 local is_bootstrap = false
@@ -15,8 +22,6 @@ require('packer').startup(function(use)
   use 'nvim-treesitter/nvim-treesitter'                                                -- Highlight, edit, and navigate code
   use { 'nvim-treesitter/nvim-treesitter-textobjects', after = { 'nvim-treesitter' } } -- Additional textobjects for treesitter
   use 'neovim/nvim-lspconfig'                                                          -- Collection of configurations for built-in LSP client
-  use 'williamboman/mason.nvim'                                                        -- Manage external editor tooling i.e LSP servers
-  use 'williamboman/mason-lspconfig.nvim'                                              -- Automatically install language servers to stdpath
   use { 'hrsh7th/nvim-cmp', requires = { 'hrsh7th/cmp-nvim-lsp' } }                    -- Autocompletion
   use { 'L3MON4D3/LuaSnip', requires = { 'saadparwaiz1/cmp_luasnip' } }                -- Snippet Engine and Snippet Expansion
   use 'nvim-lualine/lualine.nvim'                                                      -- Fancier statusline
@@ -47,14 +52,6 @@ if is_bootstrap then
   return
 end
 
--- Automatically source and re-compile packer whenever you save this init.lua
-local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
-vim.api.nvim_create_autocmd('BufWritePost', {
-  command = 'source <afile> | PackerCompile',
-  group = packer_group,
-  pattern = vim.fn.expand '$MYVIMRC',
-})
-
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
@@ -69,6 +66,8 @@ vim.o.mouse = 'a'
 
 -- Enable break indent
 vim.o.breakindent = true
+vim.o.linebreak = true
+vim.o.wrap = true
 vim.o.linebreak = true
 
 -- Save undo history
@@ -279,7 +278,7 @@ local on_attach = function(_, bufnr)
   end, '[W]orkspace [L]ist Folders')
 
   -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)diff lsp
     if vim.lsp.buf.format then
       vim.lsp.buf.format()
     elseif vim.lsp.buf.formatting then
@@ -291,17 +290,16 @@ end
 -- nvim-cmp supports additional completion capabilities
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
--- Setup mason so it can manage external tooling
-require('mason').setup()
-
--- Enable the following language servers
-local servers = {'html', 'ginko_ls', 'clangd', 'rust_analyzer', 'kotlin_language_server', 'openscad_lsp'}
+--Enable snippets for completion
 local caps = vim.lsp.protocol.make_client_capabilities()
 caps.textDocument.completion.completionItem.snippetSupport = true
--- Ensure the servers above are installed
-require('mason-lspconfig').setup {
-  ensure_installed = servers,
-}
+-- Enable the following language servers
+vim.lsp.enable('clangd')
+vim.lsp.enable('rust_enable')
+vim.lsp.enable('pyright')
+vim.lsp.enable('jsonls')
+vim.lsp.enable('yamlls')
+
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
