@@ -178,7 +178,7 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'csv', 'ini', 'jinja', 'jinja_inline', 'json', 'cmake', 'toml', 'xml', 'yaml' },
 
   highlight = { enable = true },
   indent = { enable = true },
