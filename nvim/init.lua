@@ -87,8 +87,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Enable alternate statusline
--- TODO: Fix this... docker container won't register the plugin properly without a plugin manager; might be a bad install path...
--- require('hardline').setup {}
+require('lualine').setup()
 
 -- Enable Comment.nvim
 require('Comment').setup()
