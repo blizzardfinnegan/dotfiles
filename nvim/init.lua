@@ -10,8 +10,6 @@ end
 -- stylua: ignore start
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'                                                         -- Package manager
-  use 'tpope/vim-fugitive'                                                             -- Git commands in nvim
-  use 'tpope/vim-rhubarb'                                                              -- Fugitive-companion to interact with github
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }            -- Add git related info in the signs columns and popups
   use 'numToStr/Comment.nvim'                                                          -- "gc" to comment visual regions/lines
   use 'nvim-treesitter/nvim-treesitter'                                                -- Highlight, edit, and navigate code
@@ -21,22 +19,14 @@ require('packer').startup(function(use)
   use 'williamboman/mason-lspconfig.nvim'                                              -- Automatically install language servers to stdpath
   use { 'hrsh7th/nvim-cmp', requires = { 'hrsh7th/cmp-nvim-lsp' } }                    -- Autocompletion
   use { 'L3MON4D3/LuaSnip', requires = { 'saadparwaiz1/cmp_luasnip' } }                -- Snippet Engine and Snippet Expansion
-  use 'mjlbach/onedark.nvim'                                                           -- Theme inspired by Atom
   use 'nvim-lualine/lualine.nvim'                                                      -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim'                                            -- Add indentation guides even on blank lines
   use 'tpope/vim-sleuth'                                                               -- Detect tabstop and shiftwidth automatically
   use {'folke/which-key.nvim'}                                                         -- which keys do what
-  use 'mfussenegger/nvim-jdtls'
-  use 'LnL7/vim-nix'
   -- Alternate file manager
   use { 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons',}} 
 
   use 'lervag/vimtex' -- LaTeX Editor
-  -- Fuzzy Finder (files, lsp, etc)
-  use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
-
-  -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
-  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable "make" == 1 }
 
   if is_bootstrap then
     require('packer').sync()
