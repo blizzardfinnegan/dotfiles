@@ -13,7 +13,7 @@ Plugin requirements:
   - neovim/nvim-lspconfig
   - hrsh7th/cmp-nvim-lsp
   - hrsh7th/nvim-cmp
-  - statusline TBD
+  - nvim-lualine/lualine.nvim
   - lukas-reineke/indent-blankline.nvim
   - tpope/vim-sleuth
   - folke/which-key.nvim
@@ -87,7 +87,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Enable alternate statusline
-require('lualine').setup()
+require('lualine').setup {
+  options = {
+    icons_enabled = false,
+    theme = 'onedark',
+    component_separators = '|',
+    section_separators = '',
+  },
+}
 
 -- Enable Comment.nvim
 require('Comment').setup()
