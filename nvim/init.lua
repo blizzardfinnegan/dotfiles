@@ -147,7 +147,7 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   -- ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'csv', 'ini', 'jinja', 'jinja_inline', 'json', 'cmake', 'toml', 'xml', 'yaml' },
-  parser_install_dir = "/root/.local/share/nvim/site",
+  -- parser_install_dir = "/root/.local/share/nvim/site/",
 
   highlight = { enable = true },
   indent = { enable = true },
@@ -204,10 +204,6 @@ require('nvim-treesitter.configs').setup {
     },
   },
 }
--- local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
--- parser_config.c = {
---   install_info
--- }
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
