@@ -6,14 +6,9 @@ Summary:        Neovim text editor
 License:        Apache
 Source:         https://github.com/neovim/neovim/archive/refs/tags/v0.11.1.zip
 
-BuildRequires: libtool
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: gcc-c++
 BuildRequires: pkgconfig
 BuildRequires: patch
 BuildRequires: gettext
-BuildRequires: ninja-build 
 BuildRequires: cmake
 BuildRequires: gcc 
 BuildRequires: make 
