@@ -1,7 +1,7 @@
 [user]
 	name = Blizzard Finnegan
 	email = blizzardfinnegan@gmail.com
-[commit]
-	gpgSign = true
 [core]
 	editor = nvim
+[safe]
+	directory = *
