@@ -269,6 +269,8 @@ vim.lsp.enable('rust_enable')
 vim.lsp.enable('pyright')
 vim.lsp.enable('jsonls')
 vim.lsp.enable('yamlls')
+require("lspconfig").clangd.setup({})
+
 
 
 -- nvim-cmp setup
