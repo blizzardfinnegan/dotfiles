@@ -46,3 +46,4 @@ SETUVAR fish_pager_color_selected_description:\x1d
 SETUVAR fish_pager_color_selected_prefix:\x1d
 SETUVAR fish_user_paths:/home/bluestar/scripts\x1e/usr/local/bin\x1e/usr/bin\x1e/home/bluestar/\x2elocal/bin\x1e/usr/local/go/bin
 SETUVAR TZ:America/Denver
+SETUVAR LD_LIBRARY_PATH:/opt/rh/gcc-toolset-13/root
