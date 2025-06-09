@@ -22,7 +22,7 @@ RUN git clone https://github.com/neovim/neovim && \
 # DNF installs: tmux, graphviz, cgdb
 COPY --from=builder /neovim-0.11.1-1.el8.x86_64.rpm .
 # 	Umbrello fails because of ninja conflicts; mermaid is it's own container
-RUN dnf -y install tmux graphviz cgdb tree npm lua luajit rpm-build rpmdevtools fish ripgrep && \
+RUN dnf -y install tmux graphviz cgdb tree npm lua luajit rpm-build rpmdevtools fish ripgrep gnuplot ImageMagick ghostscript && \
 	dnf -y --nogpgcheck install gcc13
 # Wont-fix: GPG fails because it's a handmade RPM that doesn't have a valid GPG key built into it (I think?)
 RUN dnf -y --nogpgcheck install ./neovim-0.11.1-1.el8.x86_64.rpm && rm ./neovim-0.11.1-1.el8.x86_64.rpm

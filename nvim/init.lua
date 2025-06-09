@@ -265,7 +265,7 @@ local caps = vim.lsp.protocol.make_client_capabilities()
 caps.textDocument.completion.completionItem.snippetSupport = true
 -- Enable the following language servers
 vim.lsp.enable('clangd')
-vim.lsp.enable('rust_enable')
+vim.lsp.enable('rust_analyzer')
 vim.lsp.enable('pyright')
 vim.lsp.enable('jsonls')
 vim.lsp.enable('yamlls')
