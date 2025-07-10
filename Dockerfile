@@ -1,41 +1,46 @@
-FROM artifactory.scitec.com/mdpap/base-images/tier-1l/app-builder:v1.2.0 AS builder
+FROM artifactory.scitec.com/mdpap/base-images/tier-1l/app-builder-9:v1.0.0 AS builder
+
+#WARNING: Missing packages: cgdb, fish, tmux.
+# tmux might be installed on the "hypervisor"... cgdb is outdated, use gdb -tui
+# Fish can be compiled and manually installed
 
 WORKDIR /root
-RUN dnf -y install rpm-build rpmdevtools && \
-	git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
-	rpmdev-setuptree && \
-	wget -O - https://github.com/neovim/neovim/archive/refs/tags/v0.11.1.zip > /root/rpmbuild/SOURCES/v0.11.1.zip && \
-	rpmbuild -bb ./dotfiles/neovim.spec && \
-	mv /root/rpmbuild/RPMS/x86_64/neovim-0.11.1-1.el8.x86_64.rpm /.
+#RUN dnf -y install rpm-build rpmdevtools && \
+#	git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
+#	rpmdev-setuptree && \
+#	wget -O - https://github.com/neovim/neovim/archive/refs/tags/v0.11.1.zip > /root/rpmbuild/SOURCES/v0.11.1.zip && \
+#	rpmbuild -bb ./dotfiles/neovim.spec && \
+#	mv /root/rpmbuild/RPMS/x86_64/neovim-0.11.1-1.el9.x86_64.rpm /.
 
 
-FROM artifactory.scitec.com/mdpap/base-images/tier-1l/app-builder:v1.2.0 
+FROM artifactory.scitec.com/mdpap/base-images/tier-1l/app-builder-9:v1.0.0 
 
 
 # nvim latest (might need a builder container first for final container size)
 WORKDIR /root 
-RUN git clone https://github.com/neovim/neovim && \
-	cd neovim && git checkout stable && \
+
+# Build and install neovim
+RUN wget https://github.com/neovim/neovim/archive/refs/tags/v0.11.2.zip && \
+	unzip v0.11.2.zip && cd neovim-0.11.2 && \
 	make CMAKE_BUILD_TYPE=Release && make install && \
-	cd .. && rm -rf neovim
+	cd .. && rm -rf neovim-0.11.2 v0.11.2.zip
 
-# DNF installs: tmux, graphviz, cgdb
-COPY --from=builder /neovim-0.11.1-1.el8.x86_64.rpm .
-# 	Umbrello fails because of ninja conflicts; mermaid is it's own container
-RUN dnf -y install tmux graphviz cgdb tree npm lua luajit rpm-build rpmdevtools fish ripgrep gnuplot ImageMagick ghostscript && \
-	dnf -y --nogpgcheck install gcc13
-# Wont-fix: GPG fails because it's a handmade RPM that doesn't have a valid GPG key built into it (I think?)
-RUN dnf -y --nogpgcheck install ./neovim-0.11.1-1.el8.x86_64.rpm && rm ./neovim-0.11.1-1.el8.x86_64.rpm
+ENV FISH_BUILD_VERSION=4.0.2
+RUN wget https://github.com/fish-shell/fish-shell/archive/refs/tags/4.0.2.zip && \
+	unzip 4.0.2.zip && cd fish-shell-4.0.2 && \
+	mkdir build && cd build && \
+	cmake .. && cmake --build . && \
+	cmake --install . && \
+	cd ../.. && rm -rf 4.0.2.zip fish-shell-4.0.2
 
-# Install LSPs; clangd is already installed
-RUN pip install pyright && \ 
-	rustup component add rust-analyzer && \
-	npm i -g vscode-json-languageservice && \
-	npm i -g yaml-language-server
+
+# Install LSPs; clangd and rust-analyzer is already installed
+RUN pip install pyright 
+	#npm i -g vscode-json-languageservice && \
+	#npm i -g yaml-language-server
 
 ARG LD_LIBRARY_PATH=/opt/rh/gcc-toolset-13/root:/opt/intel/oneapi/tbb/latest/lib/intel64/gcc4.8:/usr/local/lib64:
-# Install neovim packages manually
-# RUN mkdir -p ~/.local/share/nvim/site/pack && cd ~/.local/share/nvim/site/pack && \
+
 RUN mkdir -p ~/.config/nvim/pack/bundle/start && \
 	mkdir -p ~/.config/nvim/pack/bundle/opt && \
 	cd ~/.config/nvim/pack/bundle/start && \
@@ -66,7 +71,7 @@ RUN git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
 	 cp -r dotfiles/nvim ~/.config/.  && \
 	 cp -r dotfiles/fish ~/.config/. && \
 	 cp -r dotfiles/.tmux.conf ~/. && \
-	 usermod --shell /usr/bin/fish root && \
+	 usermod --shell /usr/local/bin/fish root && \
 	 echo "LANG=en_IE.utf8" > /etc/locale.conf && \
 	 ln -sf /usr/share/zoneinfo/America/Denver /etc/localtime && \
 	 cp dotfiles/.gitconfig ~/.
