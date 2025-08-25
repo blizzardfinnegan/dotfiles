@@ -1,37 +1,24 @@
-FROM artifactory.scitec.com/mdpap/base-images/tier-1l/app-builder-9:v1.0.0 AS builder
-
-#WARNING: Missing packages: cgdb, fish, tmux.
+#WARNING: Missing packages: cgdb, tmux.
 # tmux might be installed on the "hypervisor"... cgdb is outdated, use gdb -tui
-# Fish can be compiled and manually installed
-
-WORKDIR /root
-#RUN dnf -y install rpm-build rpmdevtools && \
-#	git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
-#	rpmdev-setuptree && \
-#	wget -O - https://github.com/neovim/neovim/archive/refs/tags/v0.11.1.zip > /root/rpmbuild/SOURCES/v0.11.1.zip && \
-#	rpmbuild -bb ./dotfiles/neovim.spec && \
-#	mv /root/rpmbuild/RPMS/x86_64/neovim-0.11.1-1.el9.x86_64.rpm /.
-
-
-FROM artifactory.scitec.com/mdpap/base-images/tier-1l/app-builder-9:v1.0.0 
-
-
-# nvim latest (might need a builder container first for final container size)
+ARG CONTAINER_VERSION=1.1.1
+FROM artifactory.scitec.com/mdpap/base-images/tier-1l/app-builder-9:v${CONTAINER_VERSION}
+ARG NEOVIM_VERSION=0.11.2
+ARG FISH_BUILD_VERSION=4.0.2
 WORKDIR /root 
 
 # Build and install neovim
-RUN wget https://github.com/neovim/neovim/archive/refs/tags/v0.11.2.zip && \
-	unzip v0.11.2.zip && cd neovim-0.11.2 && \
+RUN wget https://github.com/neovim/neovim/archive/refs/tags/v${NEOVIM_VERSION}.zip && \
+	unzip v${NEOVIM_VERSION}.zip && pushd neovim-${NEOVIM_VERSION} && \
 	make CMAKE_BUILD_TYPE=Release && make install && \
-	cd .. && rm -rf neovim-0.11.2 v0.11.2.zip
+	popd && rm -rf neovim-${NEOVIM_VERSION} v${NEOVIM_VERSION}.zip
 
-ENV FISH_BUILD_VERSION=4.0.2
-RUN wget https://github.com/fish-shell/fish-shell/archive/refs/tags/4.0.2.zip && \
-	unzip 4.0.2.zip && cd fish-shell-4.0.2 && \
-	mkdir build && cd build && \
+# Fish can be compiled and manually installed
+RUN wget https://github.com/fish-shell/fish-shell/archive/refs/tags/${FISH_BUILD_VERSION}.zip && \
+	unzip ${FISH_BUILD_VERSION}.zip && pushd fish-shell-${FISH_BUILD_VERSION} && \
+	mkdir build && pushd build && \
 	cmake .. && cmake --build . && \
 	cmake --install . && \
-	cd ../.. && rm -rf 4.0.2.zip fish-shell-4.0.2
+	popd && popd && rm -rf ${FISH_BUILD_VERSION}.zip fish-shell-${FISH_BUILD_VERSION}
 
 
 # Install LSPs; clangd and rust-analyzer is already installed
@@ -66,7 +53,6 @@ RUN mkdir -p ~/.local/share/nvim/site/parser && cd ~/.local/share/nvim/site/pars
 
 
 # Download dotfiles
-ADD "https://api.github.com/repos/blizzardfinnegan/dotfiles/commits?sha=airgap&per_page=1" latest_commit
 RUN git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
 	 cp -r dotfiles/nvim ~/.config/.  && \
 	 cp -r dotfiles/fish ~/.config/. && \
@@ -75,4 +61,3 @@ RUN git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
 	 echo "LANG=en_IE.utf8" > /etc/locale.conf && \
 	 ln -sf /usr/share/zoneinfo/America/Denver /etc/localtime && \
 	 cp dotfiles/.gitconfig ~/.
-RUN rm latest_commit
