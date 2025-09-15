@@ -1,8 +1,8 @@
 #WARNING: Missing packages: cgdb, tmux.
-# tmux might be installed on the "hypervisor"... cgdb is outdated, use gdb -tui
+# tmux might be installed on the "hypervisor"; neovim as alternative, see :terminal. cgdb is outdated, use gdb -tui
 ARG CONTAINER_VERSION=1.1.1
 FROM artifactory.scitec.com/mdpap/base-images/tier-1l/app-builder-9:v${CONTAINER_VERSION}
-ARG NEOVIM_VERSION=0.11.2
+ARG NEOVIM_VERSION=0.11.4
 ARG FISH_BUILD_VERSION=4.0.2
 WORKDIR /root 
 
@@ -51,7 +51,6 @@ RUN mkdir -p ~/.config/nvim/pack/bundle/start && \
 RUN mkdir -p ~/.local/share/nvim/site/parser && cd ~/.local/share/nvim/site/parser && \
 	nvim --headless "+TSInstall c cpp dot go diff git_config git_rebase gitcommit gitignore java make properties proto regex tmux tsv xresources comment lua python rust typescript csv ini jinja jinja_inline json cmake toml xml yaml" "+sleep 30" +qa
 
-
 # Download dotfiles
 RUN git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
 	 cp -r dotfiles/nvim ~/.config/.  && \
@@ -61,3 +60,6 @@ RUN git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
 	 echo "LANG=en_IE.utf8" > /etc/locale.conf && \
 	 ln -sf /usr/share/zoneinfo/America/Denver /etc/localtime && \
 	 cp dotfiles/.gitconfig ~/.
+
+ENV HOME=/home/bfinnegan
+WORKDIR /home/bfinnegan
