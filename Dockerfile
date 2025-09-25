@@ -4,7 +4,8 @@ ARG CONTAINER_VERSION=1.1.1
 FROM artifactory.scitec.com/mdpap/base-images/tier-1l/app-builder-9:v${CONTAINER_VERSION}
 ARG NEOVIM_VERSION=0.11.4
 ARG FISH_BUILD_VERSION=4.0.2
-WORKDIR /root 
+WORKDIR /home/bfinnegan
+ENV HOME=/home/bfinnegan
 
 # Build and install neovim
 RUN wget https://github.com/neovim/neovim/archive/refs/tags/v${NEOVIM_VERSION}.zip && \
@@ -60,6 +61,3 @@ RUN git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
 	 echo "LANG=en_IE.utf8" > /etc/locale.conf && \
 	 ln -sf /usr/share/zoneinfo/America/Denver /etc/localtime && \
 	 cp dotfiles/.gitconfig ~/.
-
-ENV HOME=/home/bfinnegan
-WORKDIR /home/bfinnegan

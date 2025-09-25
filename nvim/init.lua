@@ -60,6 +60,9 @@ vim.o.completeopt = 'menuone,noselect'
 
 vim.o.autochdir = true
 
+vim.g.loaded_netrw = 1
+vim.opt.termguicolors = true
+
 -- [[ Basic Keymaps ]]
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -269,9 +272,7 @@ vim.lsp.enable('rust_analyzer')
 vim.lsp.enable('pyright')
 vim.lsp.enable('jsonls')
 vim.lsp.enable('yamlls')
-require("lspconfig").clangd.setup({})
-
-
+vim.lsp.enable('clangd')
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
