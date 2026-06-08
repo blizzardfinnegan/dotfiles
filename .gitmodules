@@ -1,0 +1,6 @@
+[submodule "neovim"]
+	path = neovim
+	url = https://github.com/neovim/neovim
+[submodule "tree-sitter"]
+	path = tree-sitter
+	url = https://github.com/tree-sitter/tree-sitter
