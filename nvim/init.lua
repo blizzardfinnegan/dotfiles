@@ -234,7 +234,7 @@ vim.lsp.config('*', {
 
 
 -- Enable the following language servers
-vim.lsp.enable({'clang-format', 'clangd', 'rust_analyzer', 'pyright', 'jsonls', 'yamlls', 'clangd'})
+vim.lsp.enable({'clangd', 'rust_analyzer', 'pyright'})
 
 vim.g.nvim_tree_respect_buf_cwd = 1
 

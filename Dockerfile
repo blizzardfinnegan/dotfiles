@@ -4,6 +4,7 @@ ARG CONTAINER_NAME
 ARG CONTAINER_VERSION
 FROM ${CONTAINER_NAME}:v${CONTAINER_VERSION}
 ARG NEOVIM_VERSION=0.12.2
+ARG TREE_SITTER_VERSION=0.26.9
 WORKDIR /home/bfinnegan
 ENV HOME=/home/bfinnegan
 
@@ -12,6 +13,12 @@ RUN wget https://github.com/neovim/neovim/archive/refs/tags/v${NEOVIM_VERSION}.z
 	unzip v${NEOVIM_VERSION}.zip && pushd neovim-${NEOVIM_VERSION} && \
 	make CMAKE_BUILD_TYPE=Release && make install && \
 	popd && rm -rf neovim-${NEOVIM_VERSION} v${NEOVIM_VERSION}.zip
+
+# TODO: Install tree-sitter
+RUN wget https://github.com/tree-sitter/tree-sitter/archive/refs/tags/v${TREE_SITTER_VERSION}.zip && \
+	unzip v${TREE_SITTER_VERSION}.zip && pushd tree-sitter-${TREE_SITTER_VERSION} && \
+	cargo install --locked tree-sitter-cli && \
+	popd && rm -rf tree-sitter-${TREE_SITTER_VERSION} v${TREE_SITTER_VERSION}.zip
 
 # Install LSPs; clangd and rust-analyzer are expected to already be installed
 RUN pip install pyright 
@@ -31,10 +38,6 @@ RUN mkdir -p ~/.config/nvim/pack/bundle/start && \
  	git clone https://github.com/folke/which-key.nvim && \
  	git clone https://github.com/nvim-tree/nvim-web-devicons && \
  	git clone https://github.com/nvim-tree/nvim-tree.lua
-
-# Install TreeSitter headers for inline highlighting for various languages
-RUN mkdir -p ~/.local/share/nvim/site/parser && cd ~/.local/share/nvim/site/parser && \
-	nvim --headless "+sleep 60" +qa
 
 # Download dotfiles
 RUN git clone -b airgap https://github.com/blizzardfinnegan/dotfiles && \
