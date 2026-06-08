@@ -2,25 +2,24 @@
   - pyright (python)
   - rust-analyzer (rust)
   - clangd (C/C++)
+  - clang-format (C/C++)
   - vscode-json-languageservice (json)
   - yaml-language-server (yaml)
-
-Plugin requirements:
-  - nvim-lua/plenary.nvim
-  - lewis6991/gitsigns.nvim
-  - numToStr/Comment.nvim
-  - nvim-treesitter/nvim-treesitter
-  - neovim/nvim-lspconfig
-  - hrsh7th/cmp-nvim-lsp
-  - hrsh7th/nvim-cmp
-  - nvim-lualine/lualine.nvim
-  - lukas-reineke/indent-blankline.nvim
-  - tpope/vim-sleuth
-  - folke/which-key.nvim
-  - nvim-tree/nvim-web-devicons
-  - nvim-tree/nvim-tree.lua
-  - lervag/vimtex
 ]]--
+
+-- vim.pack.add({
+--   'https://github.com/lweis6991/gitsigns.nvim',
+--   'https://github.com/romus204/tree-sitter-manager.nvim',
+--   'https://github.com/neovim/nvim-lspconfig',
+--   'https://github.com/hrsh7th/nvim-cmp-lsp',
+--   'https://github.com/hrsh7th/nvim-cmp',
+--   'https://github.com/nvim-lualine/lualine.nvim',
+--   'https://github.com/lukas-reineke/indent-blankline.nvim',
+--   'https://github.com/tpope/vim-sleuth',
+--   'https://github.com/folke/which-key.nvim',
+--   'https://github.com/nvim-tree/nvim-web-devicons',
+--   'https://github.com/nvim-tree/nvim-tree.lua'
+-- })
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -89,6 +88,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+require("tree-sitter-manager").setup({
+  ensure_installed = {"c", "cpp", "dot", "go", "diff", "git_config", "git_rebase", "gitcommit", "gitignore", "java", "make", "properties", "proto", "regex", "tmux", "tsv", "xresources", "comment", "lua", "python", "rust", "typescript", "csv", "ini", "jinja", "jinja_inline", "json", "cmake", "toml", "xml", "yaml"},
+})
+
 -- Enable alternate statusline
 require('lualine').setup {
   options = {
@@ -99,15 +102,9 @@ require('lualine').setup {
   },
 }
 
--- Enable Comment.nvim
-require('Comment').setup()
-
 -- Enable `lukas-reineke/indent-blankline.nvim`
 -- See `:help indent_blankline.txt`
-require('ibl').setup {
---  char = '┊',
---  show_trailing_blankline_indent = false,
-}
+require('ibl').setup {}
 
 -- Gitsigns
 -- See `:help gitsigns.txt`
@@ -145,69 +142,6 @@ end
 
 vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 
--- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
-require('nvim-treesitter.configs').setup {
-  -- Add languages to be installed here that you want installed for treesitter
-  -- ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'csv', 'ini', 'jinja', 'jinja_inline', 'json', 'cmake', 'toml', 'xml', 'yaml' },
-  -- parser_install_dir = "/root/.local/share/nvim/site/",
-
-  highlight = { enable = true },
-  indent = { enable = true },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = '<c-space>',
-      node_incremental = '<c-space>',
-      -- TODO: I'm not sure for this one.
-      scope_incremental = '<c-s>',
-      node_decremental = '<c-backspace>',
-    },
-  },
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = '@class.inner',
-      },
-    },
-    move = {
-      enable = true,
-      set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = {
-        [']m'] = '@function.outer',
-        [']]'] = '@class.outer',
-      },
-      goto_next_end = {
-        [']M'] = '@function.outer',
-        [']['] = '@class.outer',
-      },
-      goto_previous_start = {
-        ['[m'] = '@function.outer',
-        ['[['] = '@class.outer',
-      },
-      goto_previous_end = {
-        ['[M'] = '@function.outer',
-        ['[]'] = '@class.outer',
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ['<leader>a'] = '@parameter.inner',
-      },
-      swap_previous = {
-        ['<leader>A'] = '@parameter.inner',
-      },
-    },
-  },
-}
-
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
@@ -216,7 +150,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -244,11 +178,8 @@ local on_attach = function(_, bufnr)
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, '[W]orkspace [L]ist Folders')
+
+  vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
@@ -259,20 +190,6 @@ local on_attach = function(_, bufnr)
     end
   end, { desc = 'Format current buffer with LSP' })
 end
-
--- nvim-cmp supports additional completion capabilities
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
---Enable snippets for completion
-local caps = vim.lsp.protocol.make_client_capabilities()
-caps.textDocument.completion.completionItem.snippetSupport = true
--- Enable the following language servers
-vim.lsp.enable('clangd')
-vim.lsp.enable('rust_analyzer')
-vim.lsp.enable('pyright')
-vim.lsp.enable('jsonls')
-vim.lsp.enable('yamlls')
-vim.lsp.enable('clangd')
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -305,6 +222,19 @@ cmp.setup {
     { name = 'nvim_lsp' },
   },
 }
+
+-- nvim-cmp supports additional completion capabilities
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+-- Set config
+vim.lsp.config('*', {
+  on_attach = on_attach,
+  capabilities = capabilities,
+})
+
+
+-- Enable the following language servers
+vim.lsp.enable({'clang-format', 'clangd', 'rust_analyzer', 'pyright', 'jsonls', 'yamlls', 'clangd')
 
 vim.g.nvim_tree_respect_buf_cwd = 1
 
