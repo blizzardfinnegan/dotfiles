@@ -4,8 +4,8 @@
 
 - OpenSSH
 - GnuPG
-- (Neo)Vim
-    - NeoVim requires LuaJIT, which is not yet compatible with RISC-V
+- NeoVim
+    - NeoVim requires LuaJIT, which has a RISC-V port available. See [here](https://github.com/plctlab/LuaJIT/tree/v2.1-riscv64-pr)
 - fish
 - tmux
 - curl || wget
@@ -15,13 +15,9 @@
 ## Dev tools
 
 - rustup 
-- C++ dev platform (Clang/GCC)
-- maven
+- C++ dev platform (Clang AND LLVM, GCC, CMake, Ninja)
+- gradle
 - >=jdk17
-- npm (often distributed under NodeJS)
-    - Node is not yet compatible with RISC-V
-    - @angular/cli
-    - @angular/language-server
 
 ## Monitoring tools
 
